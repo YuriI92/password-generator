@@ -26,8 +26,21 @@ var getMaxLength = function() {
   }
 };
 
-getMinLength();
-getMaxLength();
+var comfLowCase = confirm("Do you want to include lower case letters?");
+var comfUpCase = confirm("Do you want to include upper case letters?");
+var comfNumChar = confirm("Do you want to include numbers?");
+var comfSpecChar = confirm("Do you want to include special characters?");
+
+var passwordCriteria = {
+  minLength: getMinLength(),
+  maxLength: getMaxLength(),
+  lowCase: comfLowCase,
+  upCase: comfUpCase,
+  numChar: comfNumChar,
+  specChar: comfSpecChar,
+}
+
+console.dir(passwordCriteria);
 
 // Write password to the #password input
 function writePassword() {
