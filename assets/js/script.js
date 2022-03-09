@@ -1,43 +1,65 @@
 // Assignment code here
 
 // Get references to the #generate element
-//var generateBtn = document.querySelector("#generate");
+// var generateBtn = document.querySelector("#generate");
 
 var getMinLength = function() {
   var minLength = prompt("How much is the minimum character length?");
+  var toNum = Number(minLength);
 
-  if (minLength === "" || minLength === null) {
+  if (toNum === "" || toNum === null) {
     alert("The answer is not valid. Try again.");
     getMinLength();
   } else {
-    console.log(minLength);
-    return minLength;
+    console.log(toNum);
+    return toNum;
   }
 };
+
+var minLength = getMinLength();
 
 var getMaxLength = function() {
   var maxLength = prompt("How much is the maximum character length?");
+  var toNum = Number(maxLength);
 
-  if (maxLength === "" || maxLength === null) {
+  if (toNum === "" || toNum === null) {
     alert("The answer is not valid. Try again.");
+    getMaxLength();
+  } else if (toNum < minLength) {
+    alert("Please enter a number larger than the minimum character length. Try again.");
+    getMaxLength();
   } else {
-    console.log(maxLength);
-    return maxLength;
+    console.log(toNum);
+    return toNum;
   }
 };
 
-var comfLowCase = confirm("Do you want to include lower case letters?");
-var comfUpCase = confirm("Do you want to include upper case letters?");
-var comfNumChar = confirm("Do you want to include numbers?");
-var comfSpecChar = confirm("Do you want to include special characters?");
+var maxLength = getMaxLength();
+
+var lowCase = "lower case letters";
+var upCase = "upper case letters";
+var numChar = "numbers";
+var specChar = "special characters";
+
+var charType = [lowCase, upCase, numChar, specChar];
+
+var confChar = function(i) {
+  var storeConf = confirm("Do you want to include " + charType[i] + "?");
+
+  if (storeConf) {
+    return "yes";
+  } else {
+    return "no";
+  }
+}
 
 var passwordCriteria = {
-  minLength: getMinLength(),
-  maxLength: getMaxLength(),
-  lowCase: comfLowCase,
-  upCase: comfUpCase,
-  numChar: comfNumChar,
-  specChar: comfSpecChar,
+  minLength: minLength,
+  maxLength: maxLength,
+  lowCase: confChar(0),
+  upCase: confChar(1),
+  numChar: confChar(2),
+  specChar: confChar(3),
 }
 
 console.dir(passwordCriteria);
