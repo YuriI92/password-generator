@@ -13,7 +13,6 @@ var generatePassword = function() {
         alert("The answer is not valid. Try again.");
         getMinLength();
       } else {
-        console.log(toNum);
         return toNum;
       }
     };
@@ -31,7 +30,6 @@ var generatePassword = function() {
         alert("Please enter a number larger than the minimum character length. Try again.");
         getMaxLength();
       } else {
-        console.log(toNum);
         return toNum;
       }
     };
@@ -55,16 +53,32 @@ var generatePassword = function() {
     
     var maxLength = getMaxLength();
   
-    var passwordCriteria = {
-      minLength: minLength,
-      maxLength: maxLength,
-      lowCase: confChar(0),
-      upCase: confChar(1),
-      numChar: confChar(2),
-      specChar: confChar(3),
-    }
+    var lengthCrit = [
+      {
+        minLength: minLength
+      },
+      {
+        maxLength: maxLength
+      },
+    ];
+
+    var typeCrit = [
+      {
+        lowCase: confChar(0)
+      },
+      {
+        upCase: confChar(1)
+      },
+      {
+        numChar: confChar(2)
+      },
+      {
+        specChar: confChar(3)
+      },
+    ];
     
-    console.dir(passwordCriteria);
+    console.dir(lengthCrit);
+    console.dir(typeCrit);
 
     var randomValue = function(min, max) {
       var result = '';
@@ -73,12 +87,102 @@ var generatePassword = function() {
       var numbers = '0123456789';
       var special = '!#$%&()=-?+,._'
 
-      var characters = letters + letters.toUpperCase() + numbers + special;
+      var randomForm = function() {
+        for (var i = 0; i > min || i < max; i++) {
+          result += String.charAt(Math.floor(Math.random() * characters.length));
+          console.log(result);
+        }
+      }
 
-      console.log(characters);
-
+      if (typeCrit[0] = "yes") { //low case
+        if (typeCrit[1] = "yes") { //upcase
+          if (typeCrit[2] = "yes") { // num
+            if (typeCrit[3] = "yes") { // spec
+              var characters = letters + letters.toUpperCase() + numbers + special;
+              randomForm();
+              console.log(result);
+              return result;
+            } else {
+              var characters = letters + letters.toUpperCase() + numbers;
+              randomForm();
+              return result;
+            }
+          } else {
+            if (typeCrit[3] = "yes") {
+              var characters = letters + letters.toUpperCase() + special;
+              randomForm();
+              return result;
+            } else {
+              var characters = letters + letters.toUpperCase();
+              randomForm();
+              return result;
+            }
+          }
+        } else {
+          if (typeCrit[2] = "yes") {
+            if (typeCrit[3] = "yes") {
+              var characters = letters + numbers + special;
+              randomForm();
+              return result;
+            } else {
+              var characters = letters + numbers;
+              randomForm();
+              return result;
+            }
+          } else {
+            if (typeCrit[3] = "yes") {
+              var characters = letters + special;
+              randomForm();
+              return result;
+            } else {
+              var characters = letters;
+              randomForm();
+              return result;
+            }
+          }
+        }
+      } else {
+        if (typeCrit[1] = "yes") {
+          if (typeCrit[2] = "yes") {
+            if (typeCrit[3] = "yes") {
+              var characters = letters.toUpperCase() + numbers + special;
+              randomForm();
+              return result;
+            } else {
+              var characters = letters.toUpperCase() + numbers;
+              randomForm();
+              return result;
+            }
+          } else {
+            if (typeCrit[3] = "yes") {
+              var characters = letters.toUpperCase() + special;
+              randomForm();
+              return result;
+            } else {
+              var characters = letters.toUpperCase();
+              randomForm();
+              return result;
+            }
+          }
+        } else {
+          if (typeCrit[2] = "yes") {
+            if (typeCrit[3] = "yes") {
+              var characters = numbers + special;
+              randomForm();
+              return result;
+            } else {
+              var characters = numbers;
+              randomForm();
+              return result;
+            }
+          } else {
+            var characters = special;
+            randomForm();
+            return result;
+          }
+        }
+      }
     }
-
     randomValue();
   });
 }
@@ -86,13 +190,13 @@ var generatePassword = function() {
 generatePassword();
 
 // Write password to the #password input
-// function writePassword() {
-//   var password = generatePassword();
-//   var passwordText = document.querySelector("#password");
+function writePassword() {
+  var password = generatePassword();
+  var passwordText = document.querySelector("#password");
 
-//   passwordText.value = password;
+  passwordText.value = password;
 
-// }
+}
 
 // Add event listener to generate button
 // generateBtn.addEventListener("click", writePassword);
