@@ -3,81 +3,85 @@
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
+// Listens for a click on generateBtn
 generateBtn.addEventListener("click", function(){
-  // get minimum length
-  var getMinLength = function() {
-    var minLength = prompt("How much is the minimum character length?");
+  // generate random password by requesting user for a criteria
+  var generatePassword = function() {
+    // get minimum length
+    var getMinLength = function() {
+      var minLength = prompt("How much is the minimum character length?");
 
-    if (minLength === "" || minLength === null || isNaN(minLength) === true) {
-      alert("The answer is not valid. Try again.");
-      getMinLength();
-    } else {
-      // change to numeric type
-      minLength = Number(minLength);
-      return minLength;
-    }
-  };
+      // if user enter invalid value, let user try again
+      if (minLength === "" || minLength === null || isNaN(minLength) === true) {
+        alert("The answer is not valid. Try again.");
+        getMinLength();
+      } else {
+        // change to numeric type
+        minLength = Number(minLength);
+        return minLength;
+      }
+    };
+      
+    var minLength = getMinLength();
     
-  var minLength = getMinLength();
-  
-  // get maximum length
-  var getMaxLength = function() {
-    var maxLength = prompt("How much is the maximum character length?");
-  
-    if (maxLength === "" || maxLength === null || isNaN(maxLength) === true) {
-      alert("The answer is not valid. Try again.");
-      getMaxLength();
+    // get maximum length
+    var getMaxLength = function() {
+      var maxLength = prompt("How much is the maximum character length?");
+    
+      // if user enter invalid value, let user try again
+      if (maxLength === "" || maxLength === null || isNaN(maxLength) === true) {
+        alert("The answer is not valid. Try again.");
+        getMaxLength();
       // if maxLength was below minLength, let user try again
-    } else if (maxLength < minLength) {
-      alert("Please enter a number larger than the minimum character length. Try again.");
-      console.log(typeof maxLength);
-      getMaxLength();
-    } else {
-      maxLength = Number(maxLength);
-      console.log(typeof maxLength);
-      return maxLength;
-    }
-  };
-  
-  var lowCase = "lower case letters";
-  var upCase = "upper case letters";
-  var numChar = "numbers";
-  var specChar = "special characters";
-  
-  var charType = [lowCase, upCase, numChar, specChar];
-  
-  // get which character types user want to use
-  var confChar = function(i) {
-    var storeConf = confirm("Do you want to include " + charType[i] + "?");
-  
-    if (storeConf) {
-      return "yes";
-    } else {
-      return "no";
-    }
-  }
-  
-  var maxLength = getMaxLength();
+      } else if (maxLength < minLength) {
+        alert("Please enter a number larger than the minimum character length. Try again.");
+        getMaxLength();
+      } else {
+        maxLength = Number(maxLength);
+        return maxLength;
+      }
+    };
 
-  // password criteria
-  var pswCrit = [
-    {
-      min: minLength,
-      max: maxLength
-    },
-    {
-      lowCase: confChar(0),
-      upCase: confChar(1),
-      numChar: confChar(2),
-      specChar: confChar(3),
-    },
-  ];
-  
-  // print pswCrit details on console
-  console.dir(pswCrit);
-  
-  // create random characters
-  var randomValue = function() {
+    // define each characters
+    var lowCase = "lower case letters";
+    var upCase = "upper case letters";
+    var numChar = "numbers";
+    var specChar = "special characters";
+    
+    // make characters to a set so that confChar function repeat until the end of character types
+    var charType = [lowCase, upCase, numChar, specChar];
+    
+    // get which character types user want to use
+    var confChar = function(i) {
+      var storeConf = confirm("Do you want to include " + charType[i] + "?");
+    
+      if (storeConf) {
+        return "yes";
+      } else {
+        return "no";
+      }
+    }
+    
+    var maxLength = getMaxLength();
+
+    // password criteria
+    var pswCrit = [
+      {
+        min: minLength,
+        max: maxLength
+      },
+      {
+        lowCase: confChar(0),
+        upCase: confChar(1),
+        numChar: confChar(2),
+        specChar: confChar(3),
+      },
+    ];
+    
+    // print pswCrit details on console
+    console.dir(pswCrit);
+    
+    // create random characters
     var result = '';
 
     // create random length between minLength and maxLength
@@ -87,8 +91,8 @@ generateBtn.addEventListener("click", function(){
       return value;
     }
 
-    // check which chracter types user requested
-    var checkType = function () {
+    // create random password
+    var randomPassword = function () {
       // define each character types
       var letters = 'abcdefghijklmnopqrstuvwxyz';
       var numbers = '0123456789';
@@ -208,19 +212,16 @@ generateBtn.addEventListener("click", function(){
         }
       }
     }
-    checkType();
+    return randomPassword();
   }
-  randomValue();
+
+  // Write password to the #password input
+  function writePassword() {
+    var password = generatePassword();
+    var passwordText = document.querySelector("#password");
+
+    passwordText.value = password;
+  }
+
+  writePassword();
 })
-
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
-
-}
-
-// Add event listener to generate button
-// generateBtn.addEventListener("click", writePassword);
