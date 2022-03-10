@@ -3,191 +3,215 @@
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
-var generatePassword = function() {
-  generateBtn.addEventListener("click", function(){
-    var getMinLength = function() {
-      var minLength = prompt("How much is the minimum character length?");
-      var toNum = Number(minLength);
-    
-      if (toNum === "" || toNum === null) {
-        alert("The answer is not valid. Try again.");
-        getMinLength();
-      } else {
-        return toNum;
-      }
-    };
-    
-    var minLength = getMinLength();
-    
-    var getMaxLength = function() {
-      var maxLength = prompt("How much is the maximum character length?");
-      var toNum = Number(maxLength);
-    
-      if (toNum === "" || toNum === null) {
-        alert("The answer is not valid. Try again.");
-        getMaxLength();
-      } else if (toNum < minLength) {
-        alert("Please enter a number larger than the minimum character length. Try again.");
-        getMaxLength();
-      } else {
-        return toNum;
-      }
-    };
-    
-    var lowCase = "lower case letters";
-    var upCase = "upper case letters";
-    var numChar = "numbers";
-    var specChar = "special characters";
-    
-    var charType = [lowCase, upCase, numChar, specChar];
-    
-    var confChar = function(i) {
-      var storeConf = confirm("Do you want to include " + charType[i] + "?");
-    
-      if (storeConf) {
-        return "yes";
-      } else {
-        return "no";
-      }
+generateBtn.addEventListener("click", function(){
+  // get minimum length
+  var getMinLength = function() {
+    var minLength = prompt("How much is the minimum character length?");
+
+    if (minLength === "" || minLength === null || isNaN(minLength) === true) {
+      alert("The answer is not valid. Try again.");
+      getMinLength();
+    } else {
+      // change to numeric type
+      minLength = Number(minLength);
+      return minLength;
     }
+  };
     
-    var maxLength = getMaxLength();
+  var minLength = getMinLength();
   
-    var lengthCrit = [
-      {
-        minLength: minLength
-      },
-      {
-        maxLength: maxLength
-      },
-    ];
+  // get maximum length
+  var getMaxLength = function() {
+    var maxLength = prompt("How much is the maximum character length?");
+  
+    if (maxLength === "" || maxLength === null || isNaN(maxLength) === true) {
+      alert("The answer is not valid. Try again.");
+      getMaxLength();
+      // if maxLength was below minLength, let user try again
+    } else if (maxLength < minLength) {
+      alert("Please enter a number larger than the minimum character length. Try again.");
+      console.log(typeof maxLength);
+      getMaxLength();
+    } else {
+      maxLength = Number(maxLength);
+      console.log(typeof maxLength);
+      return maxLength;
+    }
+  };
+  
+  var lowCase = "lower case letters";
+  var upCase = "upper case letters";
+  var numChar = "numbers";
+  var specChar = "special characters";
+  
+  var charType = [lowCase, upCase, numChar, specChar];
+  
+  // get which character types user want to use
+  var confChar = function(i) {
+    var storeConf = confirm("Do you want to include " + charType[i] + "?");
+  
+    if (storeConf) {
+      return "yes";
+    } else {
+      return "no";
+    }
+  }
+  
+  var maxLength = getMaxLength();
 
-    var typeCrit = [
-      {
-        lowCase: confChar(0)
-      },
-      {
-        upCase: confChar(1)
-      },
-      {
-        numChar: confChar(2)
-      },
-      {
-        specChar: confChar(3)
-      },
-    ];
-    
-    console.dir(lengthCrit);
-    console.dir(typeCrit);
+  // password criteria
+  var pswCrit = [
+    {
+      min: minLength,
+      max: maxLength
+    },
+    {
+      lowCase: confChar(0),
+      upCase: confChar(1),
+      numChar: confChar(2),
+      specChar: confChar(3),
+    },
+  ];
+  
+  // print pswCrit details on console
+  console.dir(pswCrit);
+  
+  // create random characters
+  var randomValue = function() {
+    var result = '';
 
-    var randomValue = function(min, max) {
-      var result = '';
-      
+    // create random length between minLength and maxLength
+    var randomLength = function(min, max) {
+      var value = Math.floor(Math.random() * (max - min + 1)) + min;
+      console.log(value);
+      return value;
+    }
+
+    // check which chracter types user requested
+    var checkType = function () {
+      // define each character types
       var letters = 'abcdefghijklmnopqrstuvwxyz';
       var numbers = '0123456789';
       var special = '!#$%&()=-?+,._'
-
+      
+      // create random password
       var randomForm = function() {
-        for (var i = 0; i > min || i < max; i++) {
-          result += String.charAt(Math.floor(Math.random() * characters.length));
-          console.log(result);
+        // define password length using randomLength function
+        var pswLength = randomLength(minLength, maxLength);
+        // set random characters until it reaches pswLength
+        for (var i = 0; i < pswLength; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
       }
 
-      if (typeCrit[0] = "yes") { //low case
-        if (typeCrit[1] = "yes") { //upcase
-          if (typeCrit[2] = "yes") { // num
-            if (typeCrit[3] = "yes") { // spec
+      // check which type user requested to use for password and merge the characters into a single variable
+      if (pswCrit[1].lowCase === "yes") { // with lowcase
+        if (pswCrit[1].upCase === "yes") { //with upcase
+          if (pswCrit[1].numChar === "yes") { // with num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = letters + letters.toUpperCase() + numbers + special;
               randomForm();
               console.log(result);
               return result;
-            } else {
+            } else { // w/o spec
               var characters = letters + letters.toUpperCase() + numbers;
               randomForm();
+              console.log(result);
               return result;
             }
-          } else {
-            if (typeCrit[3] = "yes") {
+          } else { // lowcase, upcase, w/o num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = letters + letters.toUpperCase() + special;
               randomForm();
+              console.log(result);
               return result;
-            } else {
+            } else { // w/o spec
               var characters = letters + letters.toUpperCase();
               randomForm();
+              console.log(result);
               return result;
             }
           }
-        } else {
-          if (typeCrit[2] = "yes") {
-            if (typeCrit[3] = "yes") {
+        } else { // lowcase, w/o upcase
+          if (pswCrit[1].numChar === "yes") { // with num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = letters + numbers + special;
               randomForm();
+              console.log(result);
               return result;
-            } else {
+            } else { // no spec
               var characters = letters + numbers;
               randomForm();
+              console.log(result);
               return result;
             }
-          } else {
-            if (typeCrit[3] = "yes") {
+          } else { // lowcase, w/o upcase and num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = letters + special;
               randomForm();
+              console.log(result);
               return result;
-            } else {
+            } else { // w/o spec
               var characters = letters;
               randomForm();
+              console.log(result);
               return result;
             }
           }
         }
-      } else {
-        if (typeCrit[1] = "yes") {
-          if (typeCrit[2] = "yes") {
-            if (typeCrit[3] = "yes") {
+      } else { // w/o lowcase
+        if (pswCrit[1].upCase === "yes") { // with upcase
+          if (pswCrit[1].numChar === "yes") { // with num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = letters.toUpperCase() + numbers + special;
               randomForm();
+              console.log(result);
               return result;
-            } else {
+            } else { // w/o spec
               var characters = letters.toUpperCase() + numbers;
               randomForm();
+              console.log(result);
               return result;
             }
-          } else {
-            if (typeCrit[3] = "yes") {
+          } else { // w/o lowcase, with upcase, w/o num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = letters.toUpperCase() + special;
               randomForm();
+              console.log(result);
               return result;
-            } else {
+            } else { // w/o spec
               var characters = letters.toUpperCase();
               randomForm();
+              console.log(result);
               return result;
             }
           }
-        } else {
-          if (typeCrit[2] = "yes") {
-            if (typeCrit[3] = "yes") {
+        } else { // w/o lowcase and upcase
+          if (pswCrit[1].numChar === "yes") { // with num
+            if (pswCrit[1].specChar === "yes") { // with spec
               var characters = numbers + special;
               randomForm();
+              console.log(result);
               return result;
-            } else {
+            } else { // w/o spec
               var characters = numbers;
               randomForm();
+              console.log(result);
               return result;
             }
-          } else {
+          } else { // w/o lowcase and upcase and num, only spec
             var characters = special;
             randomForm();
+            console.log(result);
             return result;
           }
         }
       }
     }
-    randomValue();
-  });
-}
-
-generatePassword();
+    checkType();
+  }
+  randomValue();
+})
 
 // Write password to the #password input
 function writePassword() {
