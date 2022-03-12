@@ -15,24 +15,25 @@ generateBtn.addEventListener("click", function(){
       return "";
     }
     
-    // define each characters
-    var lowerCase = "lower case letters";
-    var upperCase = "upper case letters";
-    var numbers = "numbers";
-    var special = "special characters";
-    
+    // get which character types user want to use
+    var lowerCase = confirm("Do you want to include lowercase letters?");
+    var upperCase = confirm("Do you want to include uppercase letters?");
+    var numbers = confirm("Do you want to include numbers?");
+    var special = confirm("Do you want to include special characters?");
+
     // make characters to a set so that confChar function repeat until the end of character types
     var charType = [lowerCase, upperCase, numbers, special];
-    
-    // get which character types user want to use
-    var confChar = function(i) {
-      var storeConf = confirm("Do you want to include " + charType[i] + "?");
-    
-      if (storeConf) {
-        return "yes";
-      } else {
-        return "no";
+    var excludeType = 0;
+
+    for (i = 0; i < charType.length; i++) {
+      if (charType[i] === false) {
+        excludeType += 1;
       }
+    }
+
+    if (excludeType === charType.length) {
+      alert("You did not select any characters. Please select at least 1 character.");
+      return "";
     }
     
     // password criteria
@@ -41,10 +42,10 @@ generateBtn.addEventListener("click", function(){
         length: length,
       },
       {
-        lowCase: confChar(0),
-        upCase: confChar(1),
-        numChar: confChar(2),
-        specChar: confChar(3),
+        lowCase: lowerCase,
+        upCase: upperCase,
+        numChar: numbers,
+        specChar: special,
       },
     ];
     
@@ -65,8 +66,6 @@ generateBtn.addEventListener("click", function(){
 
       // create random password
       var randomForm = function() {
-        // define password length using randomLength function
-        // var pswLength = randomLength(minLength, maxLength);
         // set random characters until it reaches pswLength
         for (var i = 0; i < length; i++) {
           result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -74,10 +73,10 @@ generateBtn.addEventListener("click", function(){
       }
 
       // check which type user requested to use for password and merge the characters into a single variable
-      if (pswCrit[1].lowCase === "yes") { // with lowCase
-        if (pswCrit[1].upCase === "yes") { //with upCase
-          if (pswCrit[1].numChar === "yes") { // with num
-            if (pswCrit[1].specChar === "yes") { // with spec
+      if (pswCrit[1].lowCase === true) { // with lowCase
+        if (pswCrit[1].upCase === true) { //with upCase
+          if (pswCrit[1].numChar === true) { // with num
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = letters + letters.toUpperCase() + numbers + special;
               randomForm();
               console.log(result);
@@ -89,7 +88,7 @@ generateBtn.addEventListener("click", function(){
               return result;
             }
           } else { // lowCase, upCase, w/o num
-            if (pswCrit[1].specChar === "yes") { // with spec
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = letters + letters.toUpperCase() + special;
               randomForm();
               console.log(result);
@@ -102,8 +101,8 @@ generateBtn.addEventListener("click", function(){
             }
           }
         } else { // lowCase, w/o upCase
-          if (pswCrit[1].numChar === "yes") { // with num
-            if (pswCrit[1].specChar === "yes") { // with spec
+          if (pswCrit[1].numChar === true) { // with num
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = letters + numbers + special;
               randomForm();
               console.log(result);
@@ -115,7 +114,7 @@ generateBtn.addEventListener("click", function(){
               return result;
             }
           } else { // lowCase, w/o upCase and num
-            if (pswCrit[1].specChar === "yes") { // with spec
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = letters + special;
               randomForm();
               console.log(result);
@@ -129,9 +128,9 @@ generateBtn.addEventListener("click", function(){
           }
         }
       } else { // w/o lowCase
-        if (pswCrit[1].upCase === "yes") { // with upCase
-          if (pswCrit[1].numChar === "yes") { // with num
-            if (pswCrit[1].specChar === "yes") { // with spec
+        if (pswCrit[1].upCase === true) { // with upCase
+          if (pswCrit[1].numChar === true) { // with num
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = letters.toUpperCase() + numbers + special;
               randomForm();
               console.log(result);
@@ -143,7 +142,7 @@ generateBtn.addEventListener("click", function(){
               return result;
             }
           } else { // w/o lowCase, with upCase, w/o num
-            if (pswCrit[1].specChar === "yes") { // with spec
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = letters.toUpperCase() + special;
               randomForm();
               console.log(result);
@@ -156,8 +155,8 @@ generateBtn.addEventListener("click", function(){
             }
           }
         } else { // w/o lowCase and upCase
-          if (pswCrit[1].numChar === "yes") { // with num
-            if (pswCrit[1].specChar === "yes") { // with spec
+          if (pswCrit[1].numChar === true) { // with num
+            if (pswCrit[1].specChar === true) { // with spec
               var characters = numbers + special;
               randomForm();
               console.log(result);
